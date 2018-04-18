@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27428.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFin3D", "WPFin3D\WPFin3D.csproj", "{415E770E-E1E7-441D-9B90-35DB6D284018}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyBoardHoldingTest", "KeyBoardHoldingTest\KeyBoardHoldingTest.csproj", "{C73E9652-A0EF-48C1-82F0-68B979D3C6BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{415E770E-E1E7-441D-9B90-35DB6D284018}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{415E770E-E1E7-441D-9B90-35DB6D284018}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{415E770E-E1E7-441D-9B90-35DB6D284018}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C73E9652-A0EF-48C1-82F0-68B979D3C6BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C73E9652-A0EF-48C1-82F0-68B979D3C6BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C73E9652-A0EF-48C1-82F0-68B979D3C6BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C73E9652-A0EF-48C1-82F0-68B979D3C6BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
