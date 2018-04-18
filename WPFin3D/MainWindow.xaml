@@ -20,122 +20,87 @@
                 <ModelVisual3D.Content>
                     <Model3DGroup>
                         <AmbientLight Color = "White" />
-                        <!--<GeometryModel3D>
-                            <GeometryModel3D.Geometry>
-                                <MeshGeometry3D Positions = "0,0,0 0,8,0 10,0,0 8,8,0"
-                                                Normals = "0,0,1 0,0,1 0,0,1 0,0,1"
-                                                TriangleIndices = "0,2,1 1,2,3"/>
-                            </GeometryModel3D.Geometry>
-                            <GeometryModel3D.Material>
-                                <DiffuseMaterial Brush = "Bisque" />
-                            </GeometryModel3D.Material>
-                        </GeometryModel3D>-->
-                        <GeometryModel3D x:Name="xP_nzP">
+                        <GeometryModel3D x:Name="xP">
                             <GeometryModel3D.Geometry>
                                 <MeshGeometry3D
-                                    Normals="0,0,1"
-                                    Positions="0,0,0 2,0,0 0,0.1,0"></MeshGeometry3D>
+                                    Positions="0,0,0 2,0,0 0,0.1,0"
+                                    TriangleIndices="0 1 2 2 1 0"></MeshGeometry3D>
                             </GeometryModel3D.Geometry>
                             <GeometryModel3D.Material>
                                 <DiffuseMaterial Brush = "Blue" />
                             </GeometryModel3D.Material>
                         </GeometryModel3D>
-                        <GeometryModel3D x:Name="xP_nzN">
+                        <GeometryModel3D x:Name="xN">
                             <GeometryModel3D.Geometry>
                                 <MeshGeometry3D
-                                    Normals="0,0,-1"
-                                    Positions="2,0,0 0,0,0 0,0.1,0"></MeshGeometry3D>
+                                    Positions="-2,0,0 0,-0.1,0 0,0,0"
+                                    TriangleIndices="0 1 2 2 1 0"></MeshGeometry3D>
                             </GeometryModel3D.Geometry>
                             <GeometryModel3D.Material>
                                 <DiffuseMaterial Brush = "Blue" />
                             </GeometryModel3D.Material>
                         </GeometryModel3D>
-                        <GeometryModel3D x:Name="xM_nzP">
-                            <GeometryModel3D.Geometry>
-                                <MeshGeometry3D
-                                    Positions="-2,0,0 0,-0.1,0 0,0,0"></MeshGeometry3D>
-                            </GeometryModel3D.Geometry>
-                            <GeometryModel3D.Material>
-                                <DiffuseMaterial Brush = "Blue" />
-                            </GeometryModel3D.Material>
-                        </GeometryModel3D>
-                        <GeometryModel3D x:Name="xM_nzN">
-                            <GeometryModel3D.Geometry>
-                                <MeshGeometry3D
-                                    Positions=" 0,-0.1,0 -2,0,0  0,0,0"></MeshGeometry3D>
-                            </GeometryModel3D.Geometry>
-                            <GeometryModel3D.Material>
-                                <DiffuseMaterial Brush = "Blue" />
-                            </GeometryModel3D.Material>
-                        </GeometryModel3D>
-                        <GeometryModel3D x:Name="yP_nzP">
+                        <GeometryModel3D x:Name="yP">
                             <GeometryModel3D.Geometry>
                                 <MeshGeometry3D 
-                                    Positions="-0.1,0,0 0,0,0 0,2,0 "></MeshGeometry3D>
+                                    Positions="-0.1,0,0 0,0,0 0,2,0 "
+                                    TriangleIndices="0 1 2 2 1 0"></MeshGeometry3D>
                             </GeometryModel3D.Geometry>
                             <GeometryModel3D.Material>
                                 <DiffuseMaterial Brush = "Red" />
                             </GeometryModel3D.Material>
                         </GeometryModel3D>
-                        <GeometryModel3D x:Name="yP_nzN">
+                        <GeometryModel3D x:Name="yN">
                             <GeometryModel3D.Geometry>
                                 <MeshGeometry3D 
-                                    Positions=" 0,0,0 -0.1,0,0 0,2,0 "></MeshGeometry3D>
+                                    Positions="0,0,0 0,-2,0 0.1,0,0"
+                                    TriangleIndices="0 1 2 2 1 0"></MeshGeometry3D>
                             </GeometryModel3D.Geometry>
                             <GeometryModel3D.Material>
                                 <DiffuseMaterial Brush = "Red" />
                             </GeometryModel3D.Material>
                         </GeometryModel3D>
-                        <GeometryModel3D x:Name="yM_nzP">
+                        <GeometryModel3D x:Name="zP">
                             <GeometryModel3D.Geometry>
                                 <MeshGeometry3D 
-                                    Positions="0,0,0 0,-2,0 0.1,0,0"></MeshGeometry3D>
-                            </GeometryModel3D.Geometry>
-                            <GeometryModel3D.Material>
-                                <DiffuseMaterial Brush = "Red" />
-                            </GeometryModel3D.Material>
-                        </GeometryModel3D>
-                        <GeometryModel3D x:Name="yM_nzN">
-                            <GeometryModel3D.Geometry>
-                                <MeshGeometry3D 
-                                    Positions="0.1,0,0 0,-2,0 0,0,0"></MeshGeometry3D>
-                            </GeometryModel3D.Geometry>
-                            <GeometryModel3D.Material>
-                                <DiffuseMaterial Brush = "Red" />
-                            </GeometryModel3D.Material>
-                        </GeometryModel3D>
-                        <!--<GeometryModel3D x:Name="zP">
-                            <GeometryModel3D.Geometry>
-                                <MeshGeometry3D 
-                                    Positions="0,0,0 0.1,0,0 0,0,2"></MeshGeometry3D>
+                                    Positions="-0.1,0,0 0.1,0,0 0,0,2"
+                                    TriangleIndices="0 1 2 0 2 1"></MeshGeometry3D>
                             </GeometryModel3D.Geometry>
                             <GeometryModel3D.Material>
                                 <DiffuseMaterial Brush = "Yellow" />
                             </GeometryModel3D.Material>
                         </GeometryModel3D>
-                        <GeometryModel3D x:Name="zM">
+                        <GeometryModel3D x:Name="zN">
                             <GeometryModel3D.Geometry>
                                 <MeshGeometry3D
-                                    Positions="0,0,0 0,0,2 -0.1,0,0"></MeshGeometry3D>
+                                    Positions="-0.1,0,0 0.1,0,0 0,0,-2"
+                                    TriangleIndices="0 1 2 0 2 1"></MeshGeometry3D>
                             </GeometryModel3D.Geometry>
                             <GeometryModel3D.Material>
-                                <DiffuseMaterial Brush = "Yellow" />
+                                <DiffuseMaterial Brush = "Orange" />
                             </GeometryModel3D.Material>
-                        </GeometryModel3D>-->
-                        <GeometryModel3D>
+                        </GeometryModel3D>
+                        <GeometryModel3D x:Name="Box_zN">
                             <GeometryModel3D.Geometry>
-                                <MeshGeometry3D 
-              Positions="0,0,0 1,0,0 1,1,0 0,1,0"
-              TriangleIndices="0,1,2 0,2,3" />
+                                <MeshGeometry3D
+                                    Positions="
+                                    -1,-1,-1 -1,1,-1 1,-1,-1 1,1,-1
+                                    -1,-1,1  -1,1,1  1,-1,1  1,1,1"
+                                    TriangleIndices="
+                                    0 2 1  2 0 1  1 2 3  3 2 1
+                                    
+                                    4 6 5  6 4 5  5 6 7  7 6 5
+                                    "></MeshGeometry3D>
                             </GeometryModel3D.Geometry>
                             <GeometryModel3D.Material>
                                 <DiffuseMaterial>
                                     <DiffuseMaterial.Brush>
-                                        <SolidColorBrush Color="Cyan"/>
+                                        <SolidColorBrush Color="Green" Opacity="0.3"/>
                                     </DiffuseMaterial.Brush>
                                 </DiffuseMaterial>
                             </GeometryModel3D.Material>
                         </GeometryModel3D>
+
                     </Model3DGroup>
                 </ModelVisual3D.Content>
             </ModelVisual3D>
