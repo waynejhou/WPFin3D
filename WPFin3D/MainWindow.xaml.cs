@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
@@ -31,34 +32,52 @@ namespace WPFin3D
             var c = vp3d.Camera as PerspectiveCamera;
             var p = c.Position;
             var ld = c.LookDirection;
-            KeyBoardMovedPosition(e.Key, c, 0.5, true);
+            KeyBoardMovedPosition(e.Key, c, 0.5, 100,true);
             KeyBoardMovedLookDir(e.Key, c, 0.1, true);
         }
-        private void KeyBoardMovedPosition(Key key, PerspectiveCamera camera, double scale, bool isPrintPosi = false)
+        private void KeyBoardMovedPosition(Key key, PerspectiveCamera camera, double scale, int ms,bool isPrintPosi = false)
         {
             if (key == Key.W)
             {
-                camera.Position += Vector3D.Multiply(camera.LookDirection,scale);
+                camera.MoveVectorAnimation(
+                    Vector3D.Multiply(camera.LookDirection, scale),
+                    scale, new Duration(TimeSpan.FromMilliseconds(ms)));
+                //camera.Position += Vector3D.Multiply(camera.LookDirection,scale);
             }
             if (key == Key.S)
             {
-                camera.Position -= Vector3D.Multiply(camera.LookDirection, scale);
+                camera.MoveVectorAnimation(
+                    -Vector3D.Multiply(camera.LookDirection, scale),
+                    scale, new Duration(TimeSpan.FromMilliseconds(ms)));
+                //camera.Position -= Vector3D.Multiply(camera.LookDirection, scale);
             }
             if (key == Key.A)
             {
-                camera.Position -= Vector3D.Multiply(camera.LeftDirection(),scale);
+                camera.MoveVectorAnimation(
+                    -Vector3D.Multiply(camera.LeftDirection(), scale),
+                    scale, new Duration(TimeSpan.FromMilliseconds(ms)));
+                //camera.Position -= Vector3D.Multiply(camera.LeftDirection(),scale);
             }
             if (key == Key.D)
             {
-                camera.Position += Vector3D.Multiply(camera.LeftDirection(), scale);
+                camera.MoveVectorAnimation(
+                    Vector3D.Multiply(camera.LeftDirection(), scale),
+                    scale, new Duration(TimeSpan.FromMilliseconds(ms)));
+                //camera.Position += Vector3D.Multiply(camera.LeftDirection(), scale);
             }
             if (key == Key.Space)
             {
-                camera.Position += Vector3D.Multiply(camera.UpDirection,scale);
+                camera.MoveVectorAnimation(
+                    Vector3D.Multiply(camera.UpDirection, scale),
+                    scale, new Duration(TimeSpan.FromMilliseconds(ms)));
+                //camera.Position += Vector3D.Multiply(camera.UpDirection,scale);
             }
             if (key == Key.LeftShift)
             {
-                camera.Position -= Vector3D.Multiply(camera.UpDirection, scale);
+                camera.MoveVectorAnimation(
+                    -Vector3D.Multiply(camera.UpDirection, scale),
+                    scale, new Duration(TimeSpan.FromMilliseconds(ms)));
+                //camera.Position -= Vector3D.Multiply(camera.UpDirection, scale);
             }
             if (isPrintPosi)
                 Console.WriteLine($"{camera.Position.X}, {camera.Position.Y}, {camera.Position.Z}");
@@ -123,6 +142,15 @@ namespace WPFin3D
         public static Vector3D LeftDirection(this PerspectiveCamera camera)
         {
             return Vector3D.CrossProduct(camera.LookDirection, camera.UpDirection);
+        }
+        public static void MoveVectorAnimation(this PerspectiveCamera camera, Vector3D vector, double scale, Duration duration)
+        {
+            camera.BeginAnimation(PerspectiveCamera.PositionProperty, new Point3DAnimation()
+            {
+                From = camera.Position,
+                To = camera.Position + vector,
+                Duration = duration
+            }, HandoffBehavior.SnapshotAndReplace);
         }
     }
 }
