@@ -135,7 +135,10 @@ namespace WPFin3D
             c.Position = new Point3D(x, y, z);
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
 
+        }
     }
     static class ExtendMethod
     {

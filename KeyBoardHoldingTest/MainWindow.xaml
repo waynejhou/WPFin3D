@@ -1,4 +1,4 @@
-﻿<Window x:Class="KeyBoardHoldingTest.MainWindow"
+﻿<Window x:Name="MainWin" x:Class="KeyBoardHoldingTest.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,9 +6,22 @@
         xmlns:local="clr-namespace:KeyBoardHoldingTest"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        KeyDown="Window_KeyDown"
-        KeyUp="Window_KeyUp">
+        Closing="MainWin_Closing">
     <Grid>
-        <ListView ItemsSource="{Binding KeyPressing}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1" Margin="10">
+            <Canvas x:Name="camera" ClipToBounds="True">
+                <Canvas x:Name="board" Canvas.Left="0" Canvas.Top="0" Width="800" Height="600">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="sky.jpg" TileMode="FlipY"/>
+                    </Canvas.Background>
+                    <Label x:Name="FpsConter" Canvas.Left="0" Canvas.Top="0" Content="{Binding FpsCounter, ElementName=MainWin}"/>
+                    <Ellipse x:Name="Dot" Width="5" Height="5" Canvas.Top="133" Canvas.Left="139" Stroke="{x:Null}" Fill="Black"/>
+                </Canvas>
+            </Canvas>
+        </Border>
+
     </Grid>
 </Window>
