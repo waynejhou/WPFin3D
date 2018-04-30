@@ -59,15 +59,20 @@ namespace KeyBoardHoldingTest
             ControlledWindow.MouseWheel += ControlledWindow_MouseWheel;
             UpdateThread = new Thread(() =>
             {
+                Point lp = new Point(0, 0);
+                DateTime now;
                 while (!IsUpdateStop)
                 {
                     while (IsUpdatePause) { Thread.Sleep(1000 / (int)FpsMode); };
                     Thread.Sleep(1000 / (int)FpsMode);
-                    DateTime now;
                     frameTS = (now=DateTime.Now) - lastFrameDT;
                     lastFrameDT = now;
+
                     ControlledWindow?.Dispatcher.Invoke(() =>
                     {
+                        UpdateEventArgs.MousePoint = Mouse.GetPosition(ControlledWindow);
+                        UpdateEventArgs.MouseAxis = UpdateEventArgs.MousePoint - lp;
+                        lp = UpdateEventArgs.MousePoint;
                         FpsControlEvent?.Invoke(this, UpdateEventArgs);
                         FpsDrawEvent?.Invoke(this, UpdateEventArgs);
                         FpsUpdateEvent?.Invoke(this, UpdateEventArgs);
@@ -77,6 +82,7 @@ namespace KeyBoardHoldingTest
             });
             UpdateThread.Start();
         }
+
 
         private void ControlledWindow_MouseWheel(object sender, MouseWheelEventArgs e)
         {
