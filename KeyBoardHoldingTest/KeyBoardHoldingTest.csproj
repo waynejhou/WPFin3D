@@ -54,10 +54,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="IControllableCharacter.cs" />
+    <Compile Include="IRigidBody.cs" />
     <Compile Include="Ojisan.xaml.cs">
       <DependentUpon>Ojisan.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SimpleDirection.cs" />
     <Compile Include="WpfFrameUpdate.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

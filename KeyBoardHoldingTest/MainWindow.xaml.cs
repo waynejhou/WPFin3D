@@ -59,21 +59,27 @@ namespace KeyBoardHoldingTest
                 }
 
             GridMap.EndInit();
+            Console.WriteLine("init");
         }
 
         public string FpsCounter
         {
             get
             {
+                string x="";
                 if (wpffupd != null)
-                    return
+                    x=
                         $"Fps: {wpffupd.FpsCounter.ToString("00.000")}\n" +
                         $"F: {Ojisan.F.ToString(true)}\n" +
                         $"A: {Ojisan.A.ToString(true)}\n" +
                         $"V: {Ojisan.V.ToString(true)} {(Ojisan.V.Length* wpffupd.FpsCounter).ToString("000")} pixel/sec \n" +
-                        $"P: {Ojisan.Point.ToString(true)}";
+                        $"P: {Ojisan.Point.ToString(true)}\n" +
+                        $"Rigbody:{Ojisan.Rigidbody.Location.ToString(true)}  {Ojisan.Rigidbody.Size}";
                 else
-                    return "";
+                    x=
+                    "";
+                Console.WriteLine(x);
+                return x;
             }
         }
 
@@ -88,42 +94,44 @@ namespace KeyBoardHoldingTest
         Vector Gravity = new Vector(0, 0.98);
         private void Wpffupd_FpsControlEvent(object sender, FrameUpdateEventArgs e)
         {
-            Ojisan.F = new Vector(0, 0);
             if (e.ContainsKey(Key.Left))
-                Ojisan.Ax = -0.05;
+                Ojisan.Vx = -2;
             if (e.ContainsKey(Key.Right))
-                Ojisan.Ax = 0.05;
+                Ojisan.Vx = 2;
             if (e.ContainsKey(Key.Up))
-                Ojisan.Ay = Gravity.NegativeY().Mul(1.25).Y;
+                Ojisan.Vy = -2;
             if (e.ContainsKey(Key.Down))
-                Ojisan.Ay = 0.05;
+                Ojisan.Vy = 2;
 
         }
         private void Wpffupd_FpsUpdateEvent(object sender, FrameUpdateEventArgs e)
         {
-            //Ojisan.A = Ojisan.F.Div(Ojisan.M);
-            Ojisan.V += Ojisan.A;
-            if (Ojisan.Right > board.ActualWidth)
+            Ojisan.V = Ojisan.V.Sub(AirFriction);
+            //Console.WriteLine(BorderLine);
+            if (Ojisan.Right > BorderLine.GetRight())
             {
-                Ojisan.Right = board.ActualWidth;
-                Ojisan.V = new Vector();
+                Ojisan.V = Ojisan.V.SetX(0);
+                Ojisan.A = Ojisan.A.SetX(0);
+                Ojisan.Right = BorderLine.GetRight();
             }
-            if (Ojisan.Left < 0)
+            if (Ojisan.Left < BorderLine.GetLeft())
             {
-                Ojisan.Left = 0;
-                Ojisan.V = new Vector();
+                Ojisan.V = Ojisan.V.SetX(0);
+                Ojisan.A = Ojisan.A.SetX(0);
+                Ojisan.Left = BorderLine.GetLeft();
             }
-            if (Ojisan.Top < 0)
+            if (Ojisan.Top < BorderLine.GetTop())
             {
-                Ojisan.Top = 0;
-                Ojisan.V = new Vector();
+                Ojisan.V = Ojisan.V.SetY(0);
+                Ojisan.A = Ojisan.A.SetY(0);
+                Ojisan.Top = BorderLine.GetTop();
             }
-            if (Ojisan.Bottom > board.ActualHeight)
+            if (Ojisan.Bottom > BorderLine.GetBottom())
             {
-                Ojisan.Bottom = board.ActualHeight;
-                Ojisan.V = new Vector();
+                Ojisan.V = Ojisan.V.SetY(0);
+                Ojisan.A = Ojisan.A.SetY(0);
+                Ojisan.Bottom = BorderLine.GetBottom();
             }
-
         }
 
         private void Wpffupd_FpsDrawEvent(object sender, FrameUpdateEventArgs e)
@@ -136,6 +144,27 @@ namespace KeyBoardHoldingTest
 
         
 
+    }
+
+
+    class InternalCollision
+    {
+        List<IRigidbody> _outsideBox = new List<IRigidbody>();
+        List<IRigidbody> _insideBody = new List<IRigidbody>();
+
+        internal List<IRigidbody> OutsideBox { get => _outsideBox; set => _outsideBox = value; }
+        internal List<IRigidbody> InsideBody { get => _insideBody; set => _insideBody = value; }
+
+        public void TestCollision()
+        {
+            foreach(var ob in OutsideBox)
+            {
+                foreach(var ib in InsideBody)
+                {
+                    Console.WriteLine();
+                }
+            }
+        }
     }
 
 }

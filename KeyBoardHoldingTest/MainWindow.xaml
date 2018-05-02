@@ -14,13 +14,15 @@
         <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1" Margin="10">
             <Canvas x:Name="camera" ClipToBounds="True">
                 <Canvas x:Name="board" Canvas.Left="0" Canvas.Top="0" 
-                        Width="4000"
-                        Height="4000">
+                        Width="400"
+                        Height="400">
                     <Border BorderBrush="Red" BorderThickness="1" >
                         <Grid x:Name="GridMap"></Grid>
                     </Border>
+                    <Border x:Name="BorderLine" Canvas.Left="5" Canvas.Top="5" BorderBrush="Red" BorderThickness="2"
+                            Width="300" Height="300"/>
 
-                    <local:Ojisan x:Name="Ojisan" Canvas.Left="0" Canvas.Top="0"/>
+                    <local:Ojisan x:Name="Ojisan" Canvas.Left="10" Canvas.Top="10"/>
                 </Canvas>
                 <Label x:Name="FpsConter" Canvas.Left="0" Canvas.Top="0" Content="{Binding FpsCounter, ElementName=MainWin}"/>
             </Canvas>

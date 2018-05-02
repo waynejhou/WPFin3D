@@ -26,7 +26,7 @@ namespace KeyBoardHoldingTest
         }
     }
 
-    public partial class Ojisan : IControllableCharacter
+    public partial class Ojisan : IRigidbody
     {
         Vector _v = new Vector(0d, 0d);
         Vector _a = new Vector(0d, 0d);
@@ -43,15 +43,19 @@ namespace KeyBoardHoldingTest
         }
         public double X { get => this.GetX(); set => this.SetX(value); }
         public double Y { get => this.GetY(); set => this.SetY(value); }
+
         public Vector V { get => _v; set => _v = value; }
-        public double Vx { get => V.X; set => V = new Vector(value, V.Y); }
-        public double Vy { get => V.Y; set => V = new Vector(V.X, value); }
+        public double Vx { get => V.X; set => V = V.SetX(value); }
+        public double Vy { get => V.Y; set => V = V.SetY(value); }
+
         public Vector A { get => _a; set => _a = value; }
-        public double Ax { get => A.X; set => A = new Vector(value, A.Y); }
-        public double Ay { get => A.Y; set => A = new Vector(A.X, value); }
+        public double Ax { get => A.X; set => A = A.SetX(value); }
+        public double Ay { get => A.Y; set => A = A.SetY(value); }
+
         public Vector F { get => _f; set => _f = value; }
-        public double Fx { get => F.X; set => F = new Vector(value, F.Y); }
-        public double Fy { get => F.Y; set => F = new Vector(F.X, value); }
+        public double Fx { get => F.X; set => F = F.SetX(value); }
+        public double Fy { get => F.Y; set => F = F.SetY(value); }
+
         public double M { get => _m; set => _m = value; }
         public Rect Hitbox {
             get
@@ -82,7 +86,7 @@ namespace KeyBoardHoldingTest
                         );
                 _rigidbody = new Rect(
                     new Point(0, 0),
-                    new Size(ActualWidth, ActualHeight));
+                    new Size(canvas.Width,canvas.Height));
                 return new Rect(
                         Point, _rigidbody.Value.Size
                         );
@@ -93,13 +97,13 @@ namespace KeyBoardHoldingTest
             }
         }
 
-        public double Top { get => Rigidbody.Top; set => this.SetY(value); }
+        public double Top { get => Rigidbody.Top; set => this.SetTop(value); }
 
-        public double Left { get => Rigidbody.Left; set => this.SetX(value); }
+        public double Left { get => Rigidbody.Left; set => this.SetLeft(value); }
 
-        public double Bottom { get => Rigidbody.Bottom; set => this.SetY(value-Rigidbody.Height); }
+        public double Bottom { get => Rigidbody.Bottom; set => this.SetBottom(value); }
 
-        public double Right { get => Rigidbody.Right; set => this.SetX(value-Rigidbody.Width); }
+        public double Right { get => Rigidbody.Right; set => this.SetRight(value); }
 
 
     }

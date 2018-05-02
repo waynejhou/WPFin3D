@@ -23,13 +23,21 @@ namespace KeyBoardHoldingTest
         DateTime lastFrameDT = DateTime.Now;
         TimeSpan frameTS = TimeSpan.Zero;
         readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
+        TimeSpan _frameTime = TimeSpan.FromMilliseconds(1000 / 30);
+        FpsMode _fpsMode = FpsMode.fps30;
 
         public event FpsControlHandle FpsControlEvent;
         public event FpsDrawHandle FpsDrawEvent;
         public event FpsUpdateHandle FpsUpdateEvent;
         public Window ControlledWindow { get; set; }
         public Thread UpdateThread { get; set; }
-        public FpsMode FpsMode { get; private set; }
+        public FpsMode FpsMode { get=> _fpsMode;
+            private set
+            {
+                _fpsMode = value;
+                _frameTime = TimeSpan.FromMilliseconds(1000 / (int)FpsMode);
+            }
+        }
         public double FpsCounter => OneSecond.TotalMilliseconds / ((frameTS.TotalMilliseconds) == 0 ? 0.00001 : frameTS.TotalMilliseconds);
         public bool IsUpdateStop { get => _isUpdateStop;
             set {
@@ -66,18 +74,22 @@ namespace KeyBoardHoldingTest
                     //while (IsUpdatePause) { Thread.Sleep(1000 / (int)FpsMode); };
                     ControlledWindow?.Dispatcher.Invoke(() =>
                     {
-                        Thread.Sleep(1);
+                        //Thread.Sleep((int)_frameTime.TotalMilliseconds);
                         UpdateEventArgs.MousePoint = Mouse.GetPosition(ControlledWindow);
                         UpdateEventArgs.MouseAxis = UpdateEventArgs.MousePoint - lp;
                         lp = UpdateEventArgs.MousePoint;
                         FpsControlEvent?.Invoke(this, UpdateEventArgs);
                         FpsUpdateEvent?.Invoke(this, UpdateEventArgs);
-                        if ((frameTS = (now = DateTime.Now) - lastFrameDT) > TimeSpan.FromMilliseconds(1000 / (int)FpsMode)){
-                            FpsDrawEvent?.Invoke(this, UpdateEventArgs);
-                            lastFrameDT = now;
-                        }
 
                     });
+                    if((frameTS = (now = DateTime.Now) - lastFrameDT) > _frameTime) {
+                        ControlledWindow?.Dispatcher.Invoke(() =>
+                        {
+                            FpsDrawEvent?.Invoke(this, UpdateEventArgs);
+                            lastFrameDT = now;
+                        });
+                    };
+                                            
 
                     UpdateEventArgs.MouseDelta.Clear();
                 }

@@ -5,8 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KeyBoardHoldingTest"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="50">
-    <Canvas Height="50" Width="50">
+             d:DesignHeight="100" d:DesignWidth="50">
+    <Canvas x:Name="canvas" Height="100" Width="50">
         <Polygon Height="50" Width="50" Fill="Black" StrokeThickness="0" Points="0,0 50,0 25,50"/>
+        <Ellipse Canvas.Left="5" Canvas.Top="40" Height="60" Width="40" Fill="Black" StrokeThickness="0"/>
+        <Ellipse Canvas.Left="10" Canvas.Top="10" Height="5" Width="5" Fill="White" StrokeThickness="0"/>
+        <Ellipse Canvas.Left="35" Canvas.Top="10" Height="5" Width="5" Fill="White" StrokeThickness="0"/>
+        <Polygon Height="5" Width="20" Fill="White" StrokeThickness="0" Points="0,0 10,5 20,0" Canvas.Left="15" Canvas.Top="25"/>
     </Canvas>
 </UserControl>
