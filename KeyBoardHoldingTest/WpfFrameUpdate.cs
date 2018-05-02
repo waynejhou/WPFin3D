@@ -63,20 +63,22 @@ namespace KeyBoardHoldingTest
                 DateTime now;
                 while (!IsUpdateStop)
                 {
-                    while (IsUpdatePause) { Thread.Sleep(1000 / (int)FpsMode); };
-                    Thread.Sleep(1000 / (int)FpsMode);
-                    frameTS = (now=DateTime.Now) - lastFrameDT;
-                    lastFrameDT = now;
-
+                    //while (IsUpdatePause) { Thread.Sleep(1000 / (int)FpsMode); };
                     ControlledWindow?.Dispatcher.Invoke(() =>
                     {
+                        Thread.Sleep(1);
                         UpdateEventArgs.MousePoint = Mouse.GetPosition(ControlledWindow);
                         UpdateEventArgs.MouseAxis = UpdateEventArgs.MousePoint - lp;
                         lp = UpdateEventArgs.MousePoint;
                         FpsControlEvent?.Invoke(this, UpdateEventArgs);
-                        FpsDrawEvent?.Invoke(this, UpdateEventArgs);
                         FpsUpdateEvent?.Invoke(this, UpdateEventArgs);
+                        if ((frameTS = (now = DateTime.Now) - lastFrameDT) > TimeSpan.FromMilliseconds(1000 / (int)FpsMode)){
+                            FpsDrawEvent?.Invoke(this, UpdateEventArgs);
+                            lastFrameDT = now;
+                        }
+
                     });
+
                     UpdateEventArgs.MouseDelta.Clear();
                 }
             });

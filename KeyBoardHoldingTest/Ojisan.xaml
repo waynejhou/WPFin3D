@@ -5,12 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KeyBoardHoldingTest"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="50"
-             MaxHeight="{Binding DesiredSize.Height, RelativeSource={RelativeSource Self}}"
-             MinHeight="{Binding DesiredSize.Height, RelativeSource={RelativeSource Self}}"
-             MaxWidth="{Binding DesiredSize.Width, RelativeSource={RelativeSource Self}}"
-             MinWidth="{Binding DesiredSize.Width, RelativeSource={RelativeSource Self}}" >
-    <Canvas>
-        <Ellipse Height="50" Width="50" Fill="Black" StrokeThickness="0"/>
+             d:DesignHeight="50" d:DesignWidth="50">
+    <Canvas Height="50" Width="50">
+        <Polygon Height="50" Width="50" Fill="Black" StrokeThickness="0" Points="0,0 50,0 25,50"/>
     </Canvas>
 </UserControl>

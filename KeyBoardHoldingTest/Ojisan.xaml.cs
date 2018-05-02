@@ -93,13 +93,13 @@ namespace KeyBoardHoldingTest
             }
         }
 
-        public double Top => Rigidbody.Top;
+        public double Top { get => Rigidbody.Top; set => this.SetY(value); }
 
-        public double Left => Rigidbody.Left;
+        public double Left { get => Rigidbody.Left; set => this.SetX(value); }
 
-        public double Bottom => Rigidbody.Bottom;
+        public double Bottom { get => Rigidbody.Bottom; set => this.SetY(value-Rigidbody.Height); }
 
-        public double Right => Rigidbody.Right;
+        public double Right { get => Rigidbody.Right; set => this.SetX(value-Rigidbody.Width); }
 
 
     }

@@ -32,6 +32,7 @@ namespace KeyBoardHoldingTest
         }
 
         WpfFrameUpdate wpffupd;
+        Queue<Rect> trackLine = new Queue<Rect>();
 
         public MainWindow()
         {
@@ -40,6 +41,24 @@ namespace KeyBoardHoldingTest
             wpffupd.FpsControlEvent += Wpffupd_FpsControlEvent;
             wpffupd.FpsDrawEvent += Wpffupd_FpsDrawEvent;
             wpffupd.FpsUpdateEvent += Wpffupd_FpsUpdateEvent;
+            GridMap.BeginInit();
+            var gridSize = 200;
+            int c = ((int)board.Width / gridSize), r = ((int)board.Height / gridSize);
+            for (int i = 0; i < c ; i++)
+                GridMap.ColumnDefinitions.Add(new ColumnDefinition());
+            for (int i = 0; i < r; i++)
+                GridMap.RowDefinitions.Add(new RowDefinition());
+            for (int i = 0; i < c ; i++)
+                for(int j = 0; j < r; j++)
+                {
+                    Border newone;
+                    GridMap.Children.Add(newone=new Border() { Height = gridSize, Width = gridSize, BorderThickness = new Thickness(1), BorderBrush = Brushes.Black });
+                    Grid.SetRow(newone, i);
+                    Grid.SetColumn(newone, j);
+                    newone.Child = new Label() { Content = $"[{i}, {j}]" };
+                }
+
+            GridMap.EndInit();
         }
 
         public string FpsCounter
@@ -48,13 +67,13 @@ namespace KeyBoardHoldingTest
             {
                 if (wpffupd != null)
                     return
-                        $"{wpffupd.FpsCounter.ToString("00.000")}\n" +
-                        $"F: {Ojisan.F}\n" +
-                        $"A: {Ojisan.A}\n" +
-                        $"V: {Ojisan.V}\n" +
-                        $"P: {Ojisan.Point}";
+                        $"Fps: {wpffupd.FpsCounter.ToString("00.000")}\n" +
+                        $"F: {Ojisan.F.ToString(true)}\n" +
+                        $"A: {Ojisan.A.ToString(true)}\n" +
+                        $"V: {Ojisan.V.ToString(true)} {(Ojisan.V.Length* wpffupd.FpsCounter).ToString("000")} pixel/sec \n" +
+                        $"P: {Ojisan.Point.ToString(true)}";
                 else
-                    return $"{-1}";
+                    return "";
             }
         }
 
@@ -64,32 +83,58 @@ namespace KeyBoardHoldingTest
             wpffupd.Dispose();
         }
 
-        double friction = 1;
+        double GroundFriction = 0.1 ;
+        double AirFriction = 0.02;
+        Vector Gravity = new Vector(0, 0.98);
         private void Wpffupd_FpsControlEvent(object sender, FrameUpdateEventArgs e)
         {
+            Ojisan.F = new Vector(0, 0);
             if (e.ContainsKey(Key.Left))
-                Ojisan.Fx = -5;
+                Ojisan.Ax = -0.05;
             if (e.ContainsKey(Key.Right))
-                Ojisan.Fx = 5;
+                Ojisan.Ax = 0.05;
             if (e.ContainsKey(Key.Up))
-                Ojisan.Fy = -5;
+                Ojisan.Ay = Gravity.NegativeY().Mul(1.25).Y;
             if (e.ContainsKey(Key.Down))
-                Ojisan.Fy = 5;
-            Ojisan.A = Ojisan.F.Div(Ojisan.M).Sub(friction * Ojisan.M);
+                Ojisan.Ay = 0.05;
+
+        }
+        private void Wpffupd_FpsUpdateEvent(object sender, FrameUpdateEventArgs e)
+        {
+            //Ojisan.A = Ojisan.F.Div(Ojisan.M);
             Ojisan.V += Ojisan.A;
-            Ojisan.Point += Ojisan.V;
+            if (Ojisan.Right > board.ActualWidth)
+            {
+                Ojisan.Right = board.ActualWidth;
+                Ojisan.V = new Vector();
+            }
+            if (Ojisan.Left < 0)
+            {
+                Ojisan.Left = 0;
+                Ojisan.V = new Vector();
+            }
+            if (Ojisan.Top < 0)
+            {
+                Ojisan.Top = 0;
+                Ojisan.V = new Vector();
+            }
+            if (Ojisan.Bottom > board.ActualHeight)
+            {
+                Ojisan.Bottom = board.ActualHeight;
+                Ojisan.V = new Vector();
+            }
+
         }
 
         private void Wpffupd_FpsDrawEvent(object sender, FrameUpdateEventArgs e)
         {
             NotifyPropertyChanged(nameof(FpsCounter));
-            
+            Ojisan.Point += Ojisan.V;
+            board.SetX(-(Ojisan.GetX() - camera.ActualWidth / 2));
+            board.SetY(-(Ojisan.GetY() - camera.ActualHeight / 2));
         }
 
-        private void Wpffupd_FpsUpdateEvent(object sender, FrameUpdateEventArgs e)
-        {
-            Ojisan.F = new Vector(0,0);
-        }
+        
 
     }
 

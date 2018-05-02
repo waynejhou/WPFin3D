@@ -23,10 +23,10 @@ namespace KeyBoardHoldingTest
         Vector F { get; set; }
         Rect Hitbox { get; set; }
         Rect Rigidbody { get; set; }
-        double Top { get; }
-        double Left { get; }
-        double Bottom { get; }
-        double Right { get; }
+        double Top { get; set; }
+        double Left { get; set; }
+        double Bottom { get; set; }
+        double Right { get; set; }
     }
 
     static class CanvasExtensionMethods
@@ -43,9 +43,9 @@ namespace KeyBoardHoldingTest
         public static void SetX(this UIElement element, double x)
             => Canvas.SetLeft(element as UIElement, x);
         public static double GetY(this UIElement element)
-            => Canvas.GetLeft(element as UIElement);
+            => Canvas.GetTop(element as UIElement);
         public static void SetY(this UIElement element, double y)
-            => Canvas.SetLeft(element as UIElement, y);
+            => Canvas.SetTop(element as UIElement, y);
         public static Point Add(this Point a,Point b)
         {
             return new Point(a.X + b.X, a.Y + b.Y);
@@ -54,9 +54,45 @@ namespace KeyBoardHoldingTest
         {
             return new Vector(a.X / scale, a.Y / scale);
         }
+        public static Vector Mul(this Vector a, double scale)
+        {
+            return new Vector(a.X * scale, a.Y * scale);
+        }
         public static Vector Sub(this Vector a, double scale)
         {
-            return new Vector(a.X - scale, a.Y - scale);
+            if (a.Length != 0)
+            {
+                //Console.WriteLine(a + " " + scale);
+                return new Vector(a.X / a.Length * (a.Length - scale), a.Y / a.Length * (a.Length - scale));
+            }
+            return new Vector();
+        }
+        public static Vector Negative(this Vector a)
+        {
+            return new Vector(-a.X, -a.Y);
+        }
+        public static Vector NegativeX(this Vector a)
+        {
+            return new Vector(-a.X, a.Y);
+        }
+        public static Vector NegativeY(this Vector a)
+        {
+            return new Vector(a.X, -a.Y);
+        }
+        public static Vector UnitVector(this Vector a)
+        {
+            if (a.Length == 0)
+                return new Vector();
+            return new Vector(a.X / a.Length, a.Y / a.Length);
+        }
+
+        public static string ToString(this Vector v, bool nothing, string format = "[{0:000.00}, {1:000.00}]")
+        {
+            return string.Format(format, v.X, v.Y);
+        }
+        public static string ToString(this Point v, bool nothing, string format = "[{0:000.00}, {1:000.00}]")
+        {
+            return string.Format(format, v.X, v.Y);
         }
     }
 }
