@@ -19,12 +19,15 @@
                     <Border BorderBrush="Red" BorderThickness="1" >
                         <Grid x:Name="GridMap"></Grid>
                     </Border>
-                    <Border x:Name="BorderLine" Canvas.Left="5" Canvas.Top="5" BorderBrush="Red" BorderThickness="2"
+                    <Rectangle x:Name="BorderLine" Canvas.Left="5" Canvas.Top="5" Stroke="Red" StrokeThickness="2"
                             Width="300" Height="300"/>
 
                     <local:Ojisan x:Name="Ojisan" Canvas.Left="10" Canvas.Top="10"/>
                 </Canvas>
-                <Label x:Name="FpsConter" Canvas.Left="0" Canvas.Top="0" Content="{Binding FpsCounter, ElementName=MainWin}"/>
+                <Label x:Name="Info" Canvas.Left="0" Canvas.Top="0" Content="{Binding RealTimeInfo, ElementName=MainWin}"/>
+                <ListView x:Name="InfoLog" Width="{Binding ElementName=camera, Path=ActualWidth}" Height="90" Canvas.Left="0" Canvas.Bottom="0" Background="Transparent"
+                          ItemsSource="{Binding InfoLogList, ElementName=MainWin}" BorderThickness="0" ScrollViewer.CanContentScroll="False">
+                </ListView>
             </Canvas>
         </Border>
 

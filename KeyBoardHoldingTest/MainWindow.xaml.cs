@@ -37,7 +37,7 @@ namespace KeyBoardHoldingTest
         public MainWindow()
         {
             InitializeComponent();
-            wpffupd = new WpfFrameUpdate(this,FpsMode.fps60);
+            wpffupd = new WpfFrameUpdate(this,board,FpsMode.fps60);
             wpffupd.FpsControlEvent += Wpffupd_FpsControlEvent;
             wpffupd.FpsDrawEvent += Wpffupd_FpsDrawEvent;
             wpffupd.FpsUpdateEvent += Wpffupd_FpsUpdateEvent;
@@ -60,29 +60,42 @@ namespace KeyBoardHoldingTest
 
             GridMap.EndInit();
             Console.WriteLine("init");
+            InsideBody.Add(Ojisan);
+            OutsideBox.Add(BorderLine);
         }
 
-        public string FpsCounter
+        public string RealTimeInfo
         {
             get
             {
                 string x="";
                 if (wpffupd != null)
-                    x=
+                    x = $"Mouse: {wpffupd.UpdateEventArgs.MousePoint.ToFString()}\n" +
                         $"Fps: {wpffupd.FpsCounter.ToString("00.000")}\n" +
-                        $"F: {Ojisan.F.ToString(true)}\n" +
-                        $"A: {Ojisan.A.ToString(true)}\n" +
-                        $"V: {Ojisan.V.ToString(true)} {(Ojisan.V.Length* wpffupd.FpsCounter).ToString("000")} pixel/sec \n" +
-                        $"P: {Ojisan.Point.ToString(true)}\n" +
-                        $"Rigbody:{Ojisan.Rigidbody.Location.ToString(true)}  {Ojisan.Rigidbody.Size}";
+                        $"F: {Ojisan.F.ToFString()}\n" +
+                        $"A: {Ojisan.A.ToFString()}\n" +
+                        $"V: {Ojisan.V.ToFString()} {(Ojisan.V.Length * wpffupd.FpsCounter).ToString("000")} pixel/sec \n" +
+                        $"P: {Ojisan.Point.ToFString()}\n" +
+                        $"Rigbody:{Ojisan.Rigidbody.Location.ToFString()}  {Ojisan.Rigidbody.Size}\n" +
+                        $"Border line: {BorderLine.ToFString()}\n" +
+                        $"MousePressing: {wpffupd.UpdateEventArgs.MousePressing.ToFString()}\n" +
+                        $"KeyPressing: {wpffupd.UpdateEventArgs.KeyPressing.ToFString()}\n";
                 else
-                    x=
+                    x =
                     "";
                 Console.WriteLine(x);
                 return x;
             }
         }
-
+        public ObservableCollection<string> InfoLogList { get => _infoLogList; set => _infoLogList = value; }
+        ObservableCollection<string> _infoLogList = new ObservableCollection<string>();
+        void AddLog(string message, string tag = "Debug")
+        {
+            InfoLogList.Add($"[{DateTime.Now.ToString("hh:mm.ss.fff")}, {tag}]: {message}");
+            InfoLog.Items.MoveCurrentToLast();
+            InfoLog.ScrollIntoView(InfoLog.Items.CurrentItem);
+            NotifyPropertyChanged(nameof(InfoLogList));
+        }
 
         private void MainWin_Closing(object sender, CancelEventArgs e)
         {
@@ -90,24 +103,31 @@ namespace KeyBoardHoldingTest
         }
 
         double GroundFriction = 0.1 ;
-        double AirFriction = 0.02;
+        double AirFriction = 0.0001;
         Vector Gravity = new Vector(0, 0.98);
+        Vector v ;
         private void Wpffupd_FpsControlEvent(object sender, FrameUpdateEventArgs e)
         {
-            if (e.ContainsKey(Key.Left))
+            if (e.ContainsKeyPressing(Key.Left))
                 Ojisan.Vx = -2;
-            if (e.ContainsKey(Key.Right))
+            if (e.ContainsKeyPressing(Key.Right))
                 Ojisan.Vx = 2;
-            if (e.ContainsKey(Key.Up))
+            if (e.ContainsKeyPressing(Key.Up))
                 Ojisan.Vy = -2;
-            if (e.ContainsKey(Key.Down))
+            if (e.ContainsKeyPressing(Key.Down))
                 Ojisan.Vy = 2;
+            if (e.ContainsMouseBtnDown(MouseButton.Left))
+                AddLog($"Mouse Left Down at {e.MousePoint.ToFString()}");
+            if (e.ContainsMouseBtnPressing(MouseButton.Left))
+            {
+                Ojisan.V = (e.MousePoint - Ojisan.Point).UnitVector().Mul(2);
+            }
+
 
         }
         private void Wpffupd_FpsUpdateEvent(object sender, FrameUpdateEventArgs e)
         {
             Ojisan.V = Ojisan.V.Sub(AirFriction);
-            //Console.WriteLine(BorderLine);
             if (Ojisan.Right > BorderLine.GetRight())
             {
                 Ojisan.V = Ojisan.V.SetX(0);
@@ -136,32 +156,56 @@ namespace KeyBoardHoldingTest
 
         private void Wpffupd_FpsDrawEvent(object sender, FrameUpdateEventArgs e)
         {
-            NotifyPropertyChanged(nameof(FpsCounter));
+            NotifyPropertyChanged(nameof(RealTimeInfo));
             Ojisan.Point += Ojisan.V;
             board.SetX(-(Ojisan.GetX() - camera.ActualWidth / 2));
             board.SetY(-(Ojisan.GetY() - camera.ActualHeight / 2));
+            TestCollision();
         }
 
-        
 
     }
 
 
-    class InternalCollision
+    partial class MainWindow
     {
-        List<IRigidbody> _outsideBox = new List<IRigidbody>();
-        List<IRigidbody> _insideBody = new List<IRigidbody>();
+        List<object> _outsideBox = new List<object>();
+        List<object> _insideBody = new List<object>();
 
-        internal List<IRigidbody> OutsideBox { get => _outsideBox; set => _outsideBox = value; }
-        internal List<IRigidbody> InsideBody { get => _insideBody; set => _insideBody = value; }
+        private List<object> OutsideBox { get => _outsideBox; set => _outsideBox = value; }
+        private List<object> InsideBody { get => _insideBody; set => _insideBody = value; }
 
         public void TestCollision()
         {
-            foreach(var ob in OutsideBox)
+            foreach (var ob in OutsideBox)
             {
-                foreach(var ib in InsideBody)
+                foreach (var ib in InsideBody)
                 {
-                    Console.WriteLine();
+                    Rect ir=new Rect(), or= new Rect();
+                    if (ib is IRigidbody)
+                        ir = (ib as IRigidbody).Rigidbody;
+                    if (ib is Shape)
+                        ir = (ib as Shape).GetRigidbody();
+                    if (ob is IRigidbody)
+                        or = (ob as IRigidbody).Rigidbody;
+                    if (ob is Shape)
+                        or = (ob as Shape).GetRigidbody();
+                    if (ir.Right > or.Right)
+                    {
+                        AddLog($"Collision at Right");
+                    }
+                    if (ir.Left < or.Left)
+                    {
+                        AddLog($"Collision at Left");
+                    }
+                    if (ir.Top < or.Top)
+                    {
+                        AddLog($"Collision at Top");
+                    }
+                    if (ir.Bottom > or.Bottom)
+                    {
+                        AddLog($"Collision at Bottom");
+                    }
                 }
             }
         }
